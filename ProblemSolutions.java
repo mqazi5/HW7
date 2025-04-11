@@ -1,13 +1,16 @@
 /******************************************************************
  *
- *   YOUR NAME / SECTION NUMBER
+ *   Mohammad Qazi / SECTION 001
  *
  *   This java file contains the problem solutions for the methods selectionSort,
  *   mergeSortDivisibleByKFirst, asteroidsDestroyed, and numRescueCanoes methods.
  *
  ********************************************************************/
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class ProblemSolutions {
 
@@ -41,6 +44,30 @@ public class ProblemSolutions {
             // YOU CODE GOES HERE -- COMPLETE THE INNER LOOP OF THIS
             // "SELECTION SORT" ALGORITHM.
             // DO NOT FORGET TO ADD YOUR NAME / SECTION ABOVE
+
+            int targetIndex = i;
+
+        //for loop that goes through the unsorted portion of the array
+            for (int j = i + 1; j < n; j++) {
+                // if else statement that finds mnimum value for decending sort and maximum value for
+                //ascending sort
+                if (ascending) {
+                    if (values[j] < values[targetIndex]) {
+                        targetIndex = j;
+                    }
+                } else {
+                    if (values[j] > values[targetIndex]) {
+                        targetIndex = j;
+                    }
+                }
+            }
+
+            //swap the found target element into its correct sorted position
+            if (targetIndex != i) {
+                int temp = values[i];
+                values[i] = values[targetIndex];
+                values[targetIndex] = temp;
+            }
 
         }
 
@@ -102,7 +129,62 @@ public class ProblemSolutions {
         // TO CODE WITH A SPACE COMPLEXITY OF O(N LOG N), WHICH IS FINE FOR PURPOSES
         // OF THIS PROGRAMMING EXERCISES.
 
-        return;
+
+
+
+        int[] temp = new int[right - left + 1]; // temp array to hold the merged contents of two sub arr
+        int i = left; //pointer for left subarray
+        int j = mid + 1; //pointer for right subarray
+        int index = 0; //index for temp
+
+        //while loop that runs as long as there are elements inside the subarrays 
+        while (i <= mid && j <= right) {
+            boolean leftDiv = arr[i] % k == 0; //boolean statement that is true if the element is divisible by k
+            boolean rightDiv = arr[j] % k == 0; //boolean statement that is true if the element is divisible by k
+
+            //if staement checking if both elements in subarrays are divisible of k
+            if (leftDiv && rightDiv) {
+                temp[index] = arr[i];
+                index++;
+                i++;
+            } else if (rightDiv) { //if right is divisivle of k
+                temp[index] = arr[j];
+                index++;
+                j++;
+            } else if (leftDiv) { //if left element is divisible of k
+                temp[index] = arr[i];
+                index++;
+                i++;
+            } else { //none are divisible of k
+                if (arr[i] <= arr[j]) {
+                    temp[index] = arr[i];
+                    index++;
+                    i++;
+                } else {
+                    temp[index] = arr[j];
+                    index++;
+                    j++;
+                }
+            }
+        }
+
+        //any elements that were not merged are merged in the same order
+        while (i <= mid) {
+            temp[index] = arr[i];
+            index++;
+            i++;
+        }
+
+        while (j <= right) {
+            temp[index] = arr[j];
+            index++;
+            j++;
+        }
+
+        //adding all elements back into the original arr
+        for (int t = 0; t < temp.length; t++) {
+            arr[left + t] = temp[t];
+        }
 
     }
 
@@ -156,7 +238,22 @@ public class ProblemSolutions {
 
         // YOUR CODE GOES HERE, CONSIDER USING ARRAYS.SORT()
 
-        return false;
+        Arrays.sort(asteroids); //sort the astroids from smalles to greatest
+
+        /*
+        for loop that goes through the sorted astroids and checks if the mass is greater than or equal to 
+        the astroid mass and if it is it updates the mass by absorbing the mass of the astroid. if it is not
+        then it just returns false
+        */
+        for (int i = 0; i < asteroids.length; i++) {
+            if (mass >= asteroids[i]) {
+                mass += asteroids[i]; 
+            } else {
+                return false; 
+            }
+        }
+
+        return true;
 
     }
 
@@ -194,7 +291,28 @@ public class ProblemSolutions {
 
         // YOUR CODE GOES HERE, CONSIDER USING ARRAYS.SORT
 
-        return -1;
+        Arrays.sort(people);
+        int i = 0; // pointer to the lightest person
+        int j = people.length - 1; // pointer to the heaviest person
+        int sleds = 0; // keeps track of number of sleds used
+
+        //while loop to get through the array of people
+        while (i <= j) {
+            /* 
+            if statemenet checks if the lightest person plus the heaviest person is less than or equal to the limit 
+            if it is true they are added to a sled if they are not then only the heaviest person which is j is let on 
+            the sled.
+            */ 
+            if (people[i] + people[j] <= limit) {
+                i++;
+                j--;
+            } else {
+                j--; //only heaviest person let on
+            }
+            sleds++; 
+        }
+
+        return sleds;
 
     }
 
